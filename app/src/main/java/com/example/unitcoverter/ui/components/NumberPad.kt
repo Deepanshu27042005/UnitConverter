@@ -1,12 +1,12 @@
 package com.example.unitcoverter.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Backspace
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.unitcoverter.ui.theme.MintGreen
 import com.example.unitcoverter.ui.theme.White
+import com.example.unitcoverter.ui.theme.DarkGreen
 
 @Composable
 fun NumberPad(
@@ -34,7 +35,7 @@ fun NumberPad(
 
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         buttons.forEach { row ->
             Row(
@@ -62,27 +63,29 @@ fun NumberButton(
     onClick: () -> Unit,
     isDelete: Boolean = false
 ) {
-    Box(
-        modifier = Modifier
-            .size(72.dp)
-            .clip(CircleShape)
-            .background(if (isDelete) MintGreen else White)
-            .clickable { onClick() },
-        contentAlignment = Alignment.Center
+    Surface(
+        onClick = onClick,
+        shape = CircleShape,
+        color = if (isDelete) MintGreen else White,
+        modifier = Modifier.size(74.dp),
+        shadowElevation = if (isDelete) 0.dp else 2.dp
     ) {
-        if (isDelete) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.Backspace,
-                contentDescription = "Delete",
-                tint = Color.DarkGray
-            )
-        } else {
-            Text(
-                text = text,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color.DarkGray
-            )
+        Box(contentAlignment = Alignment.Center) {
+            if (isDelete) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.Backspace,
+                    contentDescription = "Delete",
+                    tint = DarkGreen,
+                    modifier = Modifier.size(28.dp)
+                )
+            } else {
+                Text(
+                    text = text,
+                    fontSize = 26.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.DarkGray
+                )
+            }
         }
     }
 }

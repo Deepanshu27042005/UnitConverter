@@ -53,7 +53,7 @@ fun NavGraph(
             )
         }
         composable(Screen.History.route) {
-            HistoryScreen()
+            HistoryScreen(viewModel = convertViewModel)
         }
         composable(Screen.Settings.route) {
             SettingsScreen(viewModel = settingsViewModel)

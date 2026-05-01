@@ -68,6 +68,10 @@ class ConvertViewModel : ViewModel() {
         historyList.removeIf { it.id == itemId }
     }
 
+    fun clearHistory() {
+        historyList.clear()
+    }
+
     fun setDecimalPlaces(places: Int) {
         decimalPlaces = places
         convert()

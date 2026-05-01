@@ -37,6 +37,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.unitcoverter.ui.navigation.NavGraph
 import com.example.unitcoverter.ui.navigation.Screen
 import com.example.unitcoverter.ui.theme.UnitCoverterTheme
+import com.example.unitcoverter.ui.viewmodel.ConvertViewModel
 import com.example.unitcoverter.ui.viewmodel.SettingsViewModel
 import androidx.compose.foundation.isSystemInDarkTheme
 
@@ -61,6 +62,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainApp(settingsViewModel: SettingsViewModel) {
     val navController = rememberNavController()
+    val convertViewModel: ConvertViewModel = viewModel()
     val items = listOf(
         BottomNavItem("CONVERT", Screen.Convert.route, Icons.Default.SwapHoriz),
         BottomNavItem("CATEGORIES", Screen.Categories.route, Icons.Default.GridView),
@@ -144,7 +146,11 @@ fun MainApp(settingsViewModel: SettingsViewModel) {
         }
     ) { innerPadding ->
         Surface(modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())) {
-            NavGraph(navController = navController, settingsViewModel = settingsViewModel)
+            NavGraph(
+                navController = navController, 
+                settingsViewModel = settingsViewModel,
+                convertViewModel = convertViewModel
+            )
         }
     }
 }

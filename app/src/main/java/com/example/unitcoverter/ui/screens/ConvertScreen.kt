@@ -10,6 +10,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.HelpOutline
+import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -37,44 +39,48 @@ fun ConvertScreen(viewModel: ConvertViewModel = viewModel()) {
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        containerColor = Color.Transparent
+        containerColor = SoftGray
     ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
                 .padding(padding)
                 .padding(horizontal = 16.dp)
         ) {
             // Top Header
-            Box(
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 12.dp),
-                contentAlignment = Alignment.Center
+                    .padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
+                Icon(
+                    imageVector = Icons.Outlined.Menu,
+                    contentDescription = "Menu",
+                    tint = PrimaryGreen,
+                    modifier = Modifier.size(24.dp)
+                )
                 Text(
                     text = "UNIT_LAB",
                     style = MaterialTheme.typography.titleLarge,
-                    color = DarkGreen,
+                    color = PrimaryGreen,
                     fontWeight = FontWeight.Bold
                 )
                 Icon(
                     imageVector = Icons.AutoMirrored.Outlined.HelpOutline,
                     contentDescription = "Help",
-                    tint = DarkGreen,
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .size(24.dp)
+                    tint = PrimaryGreen,
+                    modifier = Modifier.size(24.dp)
                 )
             }
 
             // Category Tabs (Pills)
             LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp)
+                    .padding(vertical = 4.dp)
             ) {
                 items(viewModel.categories) { category ->
                     CategoryTab(
@@ -85,11 +91,11 @@ fun ConvertScreen(viewModel: ConvertViewModel = viewModel()) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             // Conversion Cards
             Box(modifier = Modifier.fillMaxWidth()) {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     ConversionCard(
                         label = "FROM",
                         value = viewModel.fromValue,
@@ -111,37 +117,43 @@ fun ConvertScreen(viewModel: ConvertViewModel = viewModel()) {
                 }
 
                 // Yellow Swap Button
-                Box(
+                Surface(
+                    onClick = { viewModel.swapUnits() },
+                    shape = CircleShape,
+                    color = HighlightYellow,
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .size(44.dp)
-                        .clip(CircleShape)
-                        .background(HighlightYellow)
-                        .clickable { viewModel.swapUnits() },
-                    contentAlignment = Alignment.Center
+                        .size(38.dp),
+                    shadowElevation = 4.dp
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.SwapVert,
-                        contentDescription = "Swap",
-                        tint = DarkGreen,
-                        modifier = Modifier.size(20.dp)
-                    )
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            imageVector = Icons.Default.SwapVert,
+                            contentDescription = "Swap",
+                            tint = DarkGreen,
+                            modifier = Modifier.size(22.dp)
+                        )
+                    }
                 }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
             // Number Pad
-            NumberPad(
-                onNumberClick = { viewModel.onNumberClick(it) },
-                onDeleteClick = { viewModel.onDeleteClick() }
-            )
+            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                NumberPad(
+                    onNumberClick = { viewModel.onNumberClick(it) },
+                    onDeleteClick = { viewModel.onDeleteClick() }
+                )
+            }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             // Action Buttons: Save Result and Copy
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 OutlinedButton(
@@ -158,7 +170,7 @@ fun ConvertScreen(viewModel: ConvertViewModel = viewModel()) {
                 ) {
                     Icon(Icons.Default.BookmarkBorder, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Save Result", fontSize = 14.sp)
+                    Text("Save Result", fontSize = 14.sp, maxLines = 1)
                 }
                 OutlinedButton(
                     onClick = { 
@@ -174,11 +186,9 @@ fun ConvertScreen(viewModel: ConvertViewModel = viewModel()) {
                 ) {
                     Icon(Icons.Default.ContentCopy, contentDescription = null, modifier = Modifier.size(18.dp))
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Copy", fontSize = 14.sp)
+                    Text("Copy", fontSize = 14.sp, maxLines = 1)
                 }
             }
-            
-            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
@@ -191,9 +201,9 @@ fun CategoryTab(
 ) {
     Surface(
         onClick = onClick,
-        shape = RoundedCornerShape(24.dp),
-        color = if (isSelected) MintGreen else LightMint.copy(alpha = 0.5f),
-        modifier = Modifier.height(40.dp)
+        shape = RoundedCornerShape(20.dp),
+        color = if (isSelected) MintGreen else SoftBlue.copy(alpha = 0.5f),
+        modifier = Modifier.height(36.dp)
     ) {
         Box(
             modifier = Modifier.padding(horizontal = 20.dp),
@@ -201,8 +211,8 @@ fun CategoryTab(
         ) {
             Text(
                 text = category.name,
-                color = DarkGreen,
-                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                color = if (isSelected) DarkGreen else DarkBlue.copy(alpha = 0.7f),
+                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
                 fontSize = 14.sp
             )
         }
@@ -223,10 +233,10 @@ fun ConversionCard(
 
     Surface(
         shape = RoundedCornerShape(32.dp),
-        color = MaterialTheme.colorScheme.surface,
+        color = Color.White,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(modifier = Modifier.padding(24.dp)) {
+        Column(modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -234,8 +244,8 @@ fun ConversionCard(
             ) {
                 Text(
                     text = label,
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.ExtraBold,
                     color = TextGray
                 )
                 Box {
@@ -253,13 +263,14 @@ fun ConversionCard(
                                 text = unitName,
                                 fontSize = 12.sp,
                                 color = Color(0xFF1976D2),
-                                fontWeight = FontWeight.Medium
+                                fontWeight = FontWeight.Bold
                             )
+                            Spacer(modifier = Modifier.width(4.dp))
                             Icon(
                                 Icons.Default.ArrowDropDown,
                                 contentDescription = null,
                                 tint = Color(0xFF1976D2),
-                                modifier = Modifier.size(18.dp)
+                                modifier = Modifier.size(16.dp)
                             )
                         }
                     }
@@ -277,24 +288,26 @@ fun ConversionCard(
                 }
             }
             
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.Bottom
             ) {
                 Text(
                     text = if (value.isEmpty()) "0" else value,
-                    fontSize = 36.sp,
+                    fontSize = 32.sp,
                     fontWeight = FontWeight.Bold,
-                    color = DarkGreen,
-                    modifier = Modifier.weight(1f)
+                    color = if (isFrom) DarkGreen else DarkBlue,
+                    modifier = Modifier.alignByBaseline()
                 )
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = unit,
-                    fontSize = 18.sp,
+                    fontSize = 16.sp,
                     color = TextGray,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Normal,
+                    modifier = Modifier.alignByBaseline()
                 )
             }
         }

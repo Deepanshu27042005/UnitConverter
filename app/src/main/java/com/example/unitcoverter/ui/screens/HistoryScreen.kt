@@ -181,7 +181,18 @@ fun FavoriteCard(item: HistoryItem) {
 @Composable
 fun RecentHistorySection(history: List<HistoryItem>, viewModel: ConvertViewModel) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        Text("Recent History", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("Recent History", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            if (history.isNotEmpty()) {
+                TextButton(onClick = { viewModel.clearHistory() }) {
+                    Text("Clear All", color = Color.Red, fontWeight = FontWeight.Bold)
+                }
+            }
+        }
         if (history.isEmpty()) {
             Text("No history yet.", color = TextGray, modifier = Modifier.padding(8.dp))
         } else {
